@@ -6,7 +6,6 @@ from prettytable import PrettyTable
 # Declare variables
 CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
 DEGREES_COLUMN = 'DEGREES'
-EXPORT_FILENAME = "test.csv"
 
 
 def panda_manipulation(excel_filename):
@@ -33,7 +32,7 @@ def export_csv(csv_campoints_list):
     print("Export CSV")
     # Pandas dataframe to export CSV
     df = pd.DataFrame(csv_campoints_list, columns=[CSV_HEADER])
-    df.to_csv(EXPORT_FILENAME, index=False)
+    df.to_csv(cef.filename_without_extension + ".csv", index=False)
 
 
 # Create new instance of campoints excel file
