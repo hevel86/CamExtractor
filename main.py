@@ -1,9 +1,6 @@
 # Import necessary tools
+from campoints_excel_file import CampointsExcelFile
 import pandas as pd
-import xlrd
-import os
-import sys
-from tkinter.filedialog import *
 from prettytable import PrettyTable
 
 # Declare variables
@@ -12,18 +9,10 @@ DEGREES_COLUMN = 'DEGREES'
 EXPORT_FILENAME = "test.csv"
 
 
-def open_file():
-    """Choose an excel file to extract the campoints from"""
-    print("Open file")
-    file_name = askopenfilename(filetypes=[("Excel files", ".xlsx .xls")])
-    print(f"Filename: {filename}")
-    return file_name
-
-
-def panda_manipulation(excel_file):
+def panda_manipulation(excel_filename):
     """Use the pandas library to retrieve the degrees column and create a list"""
     # Read Excel file in pandas
-    df = pd.read_excel(filename)
+    df = pd.read_excel(excel_filename)
     # Extract raw cam points from the DEGREES column
     raw_campoints = df[DEGREES_COLUMN].tolist()
 
@@ -39,19 +28,22 @@ def panda_manipulation(excel_file):
     return campoints_list
 
 
-def export_csv(csv_campoints):
+def export_csv(csv_campoints_list):
     """Use the pandas library to export the campoints to CSV"""
     print("Export CSV")
     # Pandas dataframe to export CSV
-    df = pd.DataFrame(csv_campoints, columns=[CSV_HEADER])
+    df = pd.DataFrame(csv_campoints_list, columns=[CSV_HEADER])
     df.to_csv(EXPORT_FILENAME, index=False)
 
 
+# Create new instance of campoints excel file
+cef = CampointsExcelFile()
+
 # Call functions
 # Get full filename + path
-filename = open_file()
+
 # Get campoints from pandas + some editing
-br_campoints = panda_manipulation(filename)
+br_campoints = panda_manipulation(cef.filename_with_path)
 # Export CSV using pandas to_csv functionality
 export_csv(br_campoints)
 
