@@ -38,10 +38,7 @@ def export_csv(csv_campoints_list):
 # Create new instance of campoints excel file
 cef = CampointsExcelFile()
 
-# Call functions
-# Get full filename + path
-
-# Get campoints from pandas + some editing
+# Get campoints from pandas
 br_campoints = panda_manipulation(cef.filename_with_path)
 # Export CSV using pandas to_csv functionality
 export_csv(br_campoints)
