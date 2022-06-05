@@ -32,7 +32,7 @@ def export_csv(csv_campoints_list):
     print("Export CSV")
     # Pandas dataframe to export CSV
     df = pd.DataFrame(csv_campoints_list, columns=[CSV_HEADER])
-    df.to_csv(cef.filename_without_extension + ".csv", index=False)
+    df.to_csv(cef.csv_export_filename, index=False)
 
 
 # Create new instance of campoints excel file
