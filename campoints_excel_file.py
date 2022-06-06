@@ -8,7 +8,7 @@ POSITION_COLUMN = 'POSITION'
 
 
 class CampointsExcelFile:
-    """Retrieve excel file and store csv filename in the same path"""
+    """Retrieve Excel file and store csv filename in the same path"""
 
     def __init__(self):
         self.filename_with_path = askopenfilename(filetypes=[("Excel files", ".xlsx .xls")])
@@ -27,7 +27,7 @@ class CampointsExcelFile:
                 xl.parse(sheet)
                 df = pd.read_excel(xl, sheet)
                 # Check if the data we're looking for exists
-                if DEGREES_COLUMN in df:
+                if (DEGREES_COLUMN in df) and (POSITION_COLUMN in df):
                     self.dataframe = df
                     return True
                 else:
