@@ -14,9 +14,8 @@ def create_ascii_table(input_dictionary, table):
     # Check if the cam points list has the same number of points
     while (len(input_dictionary[CAMPOINTS_COLUMN.lower()])) != len(input_dictionary[DEGREES_COLUMN.lower()]):
         input_dictionary[CAMPOINTS_COLUMN.lower()].pop(-1)
-    table.add_column(POSITION_COLUMN.title(), input_dictionary[POSITION_COLUMN.lower()])
-    table.add_column(DEGREES_COLUMN.title(), input_dictionary[DEGREES_COLUMN.lower()])
-    table.add_column(CAMPOINTS_COLUMN.title(), input_dictionary[CAMPOINTS_COLUMN.lower()])
+    for list in input_dictionary:
+        table.add_column(list.title(), input_dictionary[list])
     table.align = "l"
 
 
@@ -61,7 +60,7 @@ def export_csv(csv_campoints_list):
 cef = CampointsExcelFile()
 
 # Check for valid data in the Excel file
-if cef.is_valid_data():
+if cef.is_valid_data:
     # Get campoints from pandas
     cef_dict = panda_manipulation(cef.filename_with_path)
     br_campoints = cef_dict[CAMPOINTS_COLUMN.lower()]
