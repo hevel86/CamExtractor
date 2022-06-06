@@ -1,13 +1,11 @@
 # Import necessary tools
-from campoints_excel_file import CampointsExcelFile
+from campoints_excel_file import CampointsExcelFile, DEGREES_COLUMN, POSITION_COLUMN
 import pandas as pd
 import openpyxl
 from prettytable import PrettyTable
 
-# Declare variables
+# Declare global constants
 CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
-DEGREES_COLUMN = 'DEGREES'
-POSITION_COLUMN = 'POSITION'
 CAMPOINTS_COLUMN = 'CAMPOINTS'
 
 
@@ -32,33 +30,24 @@ def remove_null_from_dataframe(pandas_list):
 
 def panda_manipulation(excel_filename):
     """Use the pandas library to retrieve the degrees column and create a list"""
-    # Read Excel file in pandas
-    xl = pd.ExcelFile(excel_filename)
-    # Loop through each sheet
-    for sheet in xl.sheet_names:
-        xl.parse(sheet)
-        df = pd.read_excel(xl, sheet)
-        # Check if the data we're looking for exists
-        if DEGREES_COLUMN in df:
-            # Extract data from the position and degrees column
-            degrees_list = df[DEGREES_COLUMN].tolist()
-            position_list = df[POSITION_COLUMN].tolist()
+    # Extract data from the position and degrees column
+    degrees_list = cef.dataframe[DEGREES_COLUMN].tolist()
+    position_list = cef.dataframe[POSITION_COLUMN].tolist()
 
-            # Declare empty list
-            campoints_list = []
-            # Divide by 360 for regular cam
-            for campoints_index in degrees_list:
-                # Don't add null items
-                if pd.notna(campoints_index):
-                    campoints_list.append(campoints_index / 360.0)
-            # Create dictionary
-            cef_dictionary = {
-                POSITION_COLUMN.lower(): position_list,
-                DEGREES_COLUMN.lower(): degrees_list,
-                CAMPOINTS_COLUMN.lower(): campoints_list
-            }
-            return cef_dictionary
-    # TODO Add check for valid data
+    # Declare empty list
+    campoints_list = []
+    # Divide by 360 for regular cam
+    for campoints_index in degrees_list:
+        # Don't add null items
+        if pd.notna(campoints_index):
+            campoints_list.append(campoints_index / 360.0)
+    # Create dictionary
+    cef_dictionary = {
+        POSITION_COLUMN.lower(): position_list,
+        DEGREES_COLUMN.lower(): degrees_list,
+        CAMPOINTS_COLUMN.lower(): campoints_list
+    }
+    return cef_dictionary
 
 
 def export_csv(csv_campoints_list):
@@ -71,18 +60,20 @@ def export_csv(csv_campoints_list):
 # Create new instance of campoints Excel file
 cef = CampointsExcelFile()
 
-# Get campoints from pandas
-cef_dict = panda_manipulation(cef.filename_with_path)
-br_campoints = cef_dict[CAMPOINTS_COLUMN.lower()]
+# Check for valid data in the Excel file
+if cef.is_valid_data():
+    # Get campoints from pandas
+    cef_dict = panda_manipulation(cef.filename_with_path)
+    br_campoints = cef_dict[CAMPOINTS_COLUMN.lower()]
 
-# Check if the last position value is 360
-if cef_dict[POSITION_COLUMN.lower()][-1] != 360:
-    br_campoints.append(0)
+    # Check if the last position value is 360
+    if cef_dict[POSITION_COLUMN.lower()][-1] != 360:
+        br_campoints.append(0)
 
-# Export CSV using pandas to_csv functionality
-export_csv(br_campoints)
+    # Export CSV using pandas to_csv functionality
+    export_csv(br_campoints)
 
-# Create a campoints table to print to the console
-cef_table = PrettyTable()
-create_ascii_table(cef_dict, cef_table)
-print(cef_table)
+    # Create a campoints table to print to the console
+    cef_table = PrettyTable()
+    create_ascii_table(cef_dict, cef_table)
+    print(cef_table)
