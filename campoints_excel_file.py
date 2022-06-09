@@ -17,6 +17,7 @@ class CampointsExcelFile:
         self.___filename = os.path.basename(self.filename_with_path)
         self.___filepath = os.path.dirname(self.filename_with_path)
         self.dataframe = None
+        self.is_rotodex_cam = False
 
     def is_valid_data(self):
         """Check if the uploaded Excel file is valid"""
