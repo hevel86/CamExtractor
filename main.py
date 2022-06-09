@@ -4,6 +4,7 @@ import pandas as pd
 import openpyxl
 from prettytable import PrettyTable
 import matplotlib.pyplot as plt
+import xlsxwriter
 
 # Declare global constants
 CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
@@ -20,6 +21,7 @@ def create_ascii_table(input_dictionary, table):
     for list in input_dictionary:
         table.add_column(list.title(), input_dictionary[list])
     table.align = "l"
+
 
 def create_graph(x_list, y_list):
     plt.plot(x_list, y_list)
@@ -71,11 +73,22 @@ def panda_manipulation(excel_filename):
 
     # Create dictionary
     cef_dictionary = {
-        POSITION_COLUMN.lower(): position_list,
-        DEGREES_COLUMN.lower(): degrees_list,
-        CAMPOINTS_COLUMN.lower(): campoints_list
+        POSITION_COLUMN.title(): position_list,
+        DEGREES_COLUMN.title(): degrees_list,
+        CAMPOINTS_COLUMN.title(): campoints_list
     }
     return cef_dictionary
+
+
+def export_xlsx():
+    """Exports an XLSX version of the original file"""
+    # Specify the output filename and path
+    xlsx_filename = cef.filename_without_extension + ".xlsx"
+    # Create the XLSX writer
+    xlsx_writer = pd.ExcelWriter(xlsx_filename, engine="xlsxwriter")
+    df = pd.DataFrame(cef_dict)
+    df.to_excel(xlsx_writer, sheet_name="Values", index=False)
+    xlsx_writer.save()
 
 
 def export_csv(csv_campoints_list):
@@ -94,7 +107,7 @@ if cef.is_valid_data():
     cef_dict = panda_manipulation(cef.filename_with_path)
 
     # Make sure to use the list copy functionality if we need to edit the list, simply setting equals to makes it act as a pointer
-    br_campoints = cef_dict[CAMPOINTS_COLUMN.lower()].copy()
+    br_campoints = cef_dict[CAMPOINTS_COLUMN.title()].copy()
 
     # Create a campoints table to print to the console
     cef_table = PrettyTable()
@@ -105,4 +118,4 @@ if cef.is_valid_data():
 
     # Print the ascii table
     print(cef_table)
-    create_graph(x_list= cef_dict[POSITION_COLUMN.lower()], y_list=cef_dict[DEGREES_COLUMN.lower()])
+    create_graph(x_list= cef_dict[POSITION_COLUMN.title()], y_list=cef_dict[DEGREES_COLUMN.title()])
