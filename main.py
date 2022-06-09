@@ -7,37 +7,59 @@ from prettytable import PrettyTable
 # Declare global constants
 CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
 CAMPOINTS_COLUMN = 'CAMPOINTS'
+REGULAR_NUM_CAMPOINTS = 360
+REGULAR_FINAL_CAMPOINT = 0
+ROTODEX_NUM_CAMPOINTS = 180
+ROTODEX_FINAL_CAMPOINT = 1
 
 
 def create_ascii_table(input_dictionary, table):
     """Create an ascii table from the derived data"""
     for list in input_dictionary:
-        # Assume that the position column will be the shortest
-        table.add_column(list.title(), input_dictionary[list[:len(input_dictionary[POSITION_COLUMN.lower()])]])
+        table.add_column(list.title(), input_dictionary[list])
     table.align = "l"
 
 
 def remove_null_from_dataframe(pandas_list):
     """Remove null values from list extracted via pandas library"""
-    for index, item in pandas_list:
-        if pd.isna(item):
-            pandas_list[index] = 0
-    return pandas_list
+    # Loop through the original and make changes to the new list
+    clean_list = []
+    for items in pandas_list:
+        if pd.notna(items):
+            clean_list.append(items)
+    return clean_list
 
 
 def panda_manipulation(excel_filename):
     """Use the pandas library to retrieve the degrees column and create a list"""
-    # Extract data from the position and degrees column
-    degrees_list = cef.dataframe[DEGREES_COLUMN].tolist()
-    position_list = cef.dataframe[POSITION_COLUMN].tolist()
+    # Extract data from the position and degrees column after removing the null values
+    degrees_list = remove_null_from_dataframe(cef.dataframe[DEGREES_COLUMN].tolist())
+    position_list = remove_null_from_dataframe(cef.dataframe[POSITION_COLUMN].tolist())
+
+    # Check if it's a rotodex cam
+    if len(position_list) <= 37:
+        cef.is_rotodex_cam = True
+
+    # Check if the list ends at 355 or 360 for regular cams, or 175 or 180 for rotodex cams
+    if not cef.is_rotodex_cam:
+        num_campoints = REGULAR_NUM_CAMPOINTS
+        final_degrees_position = REGULAR_FINAL_CAMPOINT
+    else:
+        num_campoints = ROTODEX_NUM_CAMPOINTS
+        final_degrees_position = ROTODEX_NUM_CAMPOINTS
+
+    if position_list[-1] != num_campoints:
+        position_list.append(num_campoints)
+        degrees_list.append(final_degrees_position)
 
     # Declare empty list
     campoints_list = []
-    # Divide by 360 for regular cam
+    # Divide by num campoints
     for campoints_index in degrees_list:
         # Don't add null items
         if pd.notna(campoints_index):
-            campoints_list.append(campoints_index / 360.0)
+            campoints_list.append(campoints_index / num_campoints)
+
     # Create dictionary
     cef_dictionary = {
         POSITION_COLUMN.lower(): position_list,
@@ -61,16 +83,16 @@ cef = CampointsExcelFile()
 if cef.is_valid_data():
     # Get campoints from pandas
     cef_dict = panda_manipulation(cef.filename_with_path)
-    br_campoints = cef_dict[CAMPOINTS_COLUMN.lower()]
 
-    # Check if the last position value is 360
-    if cef_dict[POSITION_COLUMN.lower()][-1] != 360:
-        br_campoints.append(0)
-
-    # Export CSV using pandas to_csv functionality
-    export_csv(br_campoints)
+    # Make sure to use the list copy functionality if we need to edit the list, simply setting equals to makes it act as a pointer
+    br_campoints = cef_dict[CAMPOINTS_COLUMN.lower()].copy()
 
     # Create a campoints table to print to the console
     cef_table = PrettyTable()
     create_ascii_table(cef_dict, cef_table)
+
+    # Export CSV using pandas to_csv functionality
+    export_csv(br_campoints)
+
+    # Print the ascii table
     print(cef_table)
