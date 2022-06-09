@@ -3,6 +3,7 @@ from campoints_excel_file import CampointsExcelFile, DEGREES_COLUMN, POSITION_CO
 import pandas as pd
 import openpyxl
 from prettytable import PrettyTable
+import matplotlib.pyplot as plt
 
 # Declare global constants
 CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
@@ -18,6 +19,13 @@ def create_ascii_table(input_dictionary, table):
     for list in input_dictionary:
         table.add_column(list.title(), input_dictionary[list])
     table.align = "l"
+
+def create_graph(x_list, y_list):
+    plt.plot(x_list, y_list)
+    plt.title(cef.base_filename)
+    plt.xlabel(POSITION_COLUMN.title())
+    plt.ylabel(DEGREES_COLUMN.title())
+    plt.show()
 
 
 def remove_null_from_dataframe(pandas_list):
@@ -52,7 +60,7 @@ def panda_manipulation(excel_filename):
         position_list.append(num_campoints)
         degrees_list.append(final_degrees_position)
 
-    # Declare empty list
+    # Declare empty campoints list
     campoints_list = []
     # Divide by num campoints
     for campoints_index in degrees_list:
@@ -96,3 +104,4 @@ if cef.is_valid_data():
 
     # Print the ascii table
     print(cef_table)
+    create_graph(x_list= cef_dict[POSITION_COLUMN.lower()], y_list=cef_dict[DEGREES_COLUMN.lower()])
