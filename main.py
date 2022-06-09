@@ -10,6 +10,7 @@ CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
 CAMPOINTS_COLUMN = 'CAMPOINTS'
 REGULAR_NUM_CAMPOINTS = 360
 REGULAR_FINAL_CAMPOINT = 0
+EXPECTED_ROTODEX_LIST_LENGTH = 37
 ROTODEX_NUM_CAMPOINTS = 180
 ROTODEX_FINAL_CAMPOINT = 1
 
@@ -45,7 +46,7 @@ def panda_manipulation(excel_filename):
     position_list = remove_null_from_dataframe(cef.dataframe[POSITION_COLUMN].tolist())
 
     # Check if it's a rotodex cam
-    if len(position_list) <= 37:
+    if len(position_list) <= EXPECTED_ROTODEX_LIST_LENGTH:
         cef.is_rotodex_cam = True
 
     # Check if the list ends at 355 or 360 for regular cams, or 175 or 180 for rotodex cams
