@@ -19,6 +19,7 @@ class CampointsExcelFile:
         self.dataframe = None
 
     def is_valid_data(self):
+        """Check if the uploaded Excel file is valid"""
         # Read Excel file in pandas
         try:
             xl = pd.ExcelFile(self.filename_with_path)
