@@ -73,9 +73,9 @@ def panda_manipulation(excel_filename):
 
     # Create dictionary
     cef_dictionary = {
-        POSITION_COLUMN.title(): position_list,
-        DEGREES_COLUMN.title(): degrees_list,
-        CAMPOINTS_COLUMN.title(): campoints_list
+        POSITION_COLUMN: position_list,
+        DEGREES_COLUMN: degrees_list,
+        CAMPOINTS_COLUMN: campoints_list
     }
     return cef_dictionary
 
@@ -106,8 +106,9 @@ if cef.is_valid_data():
     # Get campoints from pandas
     cef_dict = panda_manipulation(cef.filename_with_path)
 
-    # Make sure to use the list copy functionality if we need to edit the list, simply setting equals to makes it act as a pointer
-    br_campoints = cef_dict[CAMPOINTS_COLUMN.title()].copy()
+    # Make sure to use the list copy functionality if we need to edit the list
+    # simply setting "equals to" makes it act as a pointer
+    br_campoints = cef_dict[CAMPOINTS_COLUMN].copy()
 
     # Create a campoints table to print to the console
     cef_table = PrettyTable()
@@ -118,4 +119,4 @@ if cef.is_valid_data():
 
     # Print the ascii table
     print(cef_table)
-    create_graph(x_list= cef_dict[POSITION_COLUMN.title()], y_list=cef_dict[DEGREES_COLUMN.title()])
+    create_graph(x_list=cef_dict[POSITION_COLUMN], y_list=cef_dict[DEGREES_COLUMN])
