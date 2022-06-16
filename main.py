@@ -24,10 +24,12 @@ def create_ascii_table(input_dictionary, table):
 
 
 def create_graph(x_list, y_list):
+    """Create graph using pyplot"""
     plt.plot(x_list, y_list)
     plt.title(cef.base_filename)
     plt.xlabel(POSITION_COLUMN.title())
     plt.ylabel(DEGREES_COLUMN.title())
+    plt.get_current_fig_manager().set_window_title("Motion Profile")
     plt.show()
 
 
