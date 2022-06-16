@@ -29,7 +29,7 @@ def create_graph(x_list, y_list):
     plt.title(cef.base_filename)
     plt.xlabel(POSITION_COLUMN.title())
     plt.ylabel(DEGREES_COLUMN.title())
-    plt.get_current_fig_manager().set_window_title("Motion Profile")
+    plt.get_current_fig_manager().set_window_title(cef.figure_title + " Motion Profile")
     plt.show()
 
 
