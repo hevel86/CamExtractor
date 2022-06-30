@@ -36,10 +36,7 @@ def create_graph(x_list, y_list):
 def remove_null_from_dataframe(pandas_list):
     """Remove null values from list extracted via pandas library"""
     # Loop through the original and make changes to the new list
-    clean_list = []
-    for items in pandas_list:
-        if pd.notna(items):
-            clean_list.append(items)
+    clean_list = [items for items in pandas_list if pd.notna(items)]
     return clean_list
 
 
@@ -65,13 +62,8 @@ def panda_manipulation(excel_filename):
         position_list.append(num_campoints)
         degrees_list.append(final_degrees_position)
 
-    # Declare empty campoints list
-    campoints_list = []
-    # Divide by num campoints
-    for campoints_index in degrees_list:
-        # Don't add null items
-        if pd.notna(campoints_index):
-            campoints_list.append(campoints_index / num_campoints)
+    # Create campoints list by dividing by the num campoints if the item isn't null
+    campoints_list = [campoints_index / num_campoints for campoints_index in degrees_list if pd.notna(campoints_index)]
 
     # Create dictionary
     cef_dictionary = {
