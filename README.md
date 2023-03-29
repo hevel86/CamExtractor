@@ -1,17 +1,15 @@
-README
-
-Python Script - `campoints.py`
+# Cam Extractor
 
 This Python script is designed to extract data from a specified Excel file and perform operations on the data to generate CAMPOINTS data. The CAMPOINTS data is then exported to a CSV file and an XLSX file. The script also generates an ASCII table and a graph using pyplot.
 
-Prerequisites:
+## Prerequisites:
 - Python 3.x
 - pandas
 - openpyxl
 - prettytable
 - matplotlib
 
-Usage:
+## Usage:
 1. Place the `campoints.py` file in a directory.
 2. Ensure that the necessary libraries (pandas, openpyxl, prettytable, and matplotlib) are installed.
 3. Place the Excel file that contains the data in the same directory.
@@ -19,7 +17,7 @@ Usage:
 5. Run the script using the following command: `python campoints.py`
 6. The generated CSV and XLSX files will be stored in the same directory.
 
-Functionality:
+## Functionality:
 - The `campoints_excel_file` module is imported to extract data from the Excel file.
 - The `create_ascii_table` function is used to create an ASCII table from the derived data.
 - The `create_graph` function is used to generate a graph using pyplot.
