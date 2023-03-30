@@ -110,6 +110,7 @@ if cef.is_valid_data():
 
     # Export CSV using pandas to_csv functionality
     export_csv(br_campoints)
+    export_xlsx()
 
     # Print the ascii table
     print(cef_table)
