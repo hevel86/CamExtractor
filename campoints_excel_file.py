@@ -5,6 +5,10 @@ import pandas as pd
 # Declare global constants
 DEGREES_COLUMN = 'DEGREES'
 POSITION_COLUMN = 'POSITION'
+DEFAULT_TERMINAL_TEXT = '\033[0m'
+RED_TERMINAL_TEXT = '\033[31m'
+GREEN_TERMINAL_TEXT = '\033[32m'
+BLUE_TERMINAL_TEXT = '\033[34m'
 
 
 class CampointsExcelFile:
@@ -31,11 +35,12 @@ class CampointsExcelFile:
 
         # Assign the validity to false, initially
         file_validity = False
+        # Check for a valid campoints sheet in the pandas dataframe
         try:
             xl = pd.ExcelFile(self.filename_with_path)
             # Loop through each sheet
             for sheet in xl.sheet_names:
-                print(f'Scanning sheet {sheet}')
+                print(f'Scanning sheet {BLUE_TERMINAL_TEXT}{sheet}{DEFAULT_TERMINAL_TEXT}')
                 xl.parse(sheet)
                 df = pd.read_excel(xl, sheet)
                 # Check if the data we're looking for exists
@@ -47,9 +52,9 @@ class CampointsExcelFile:
                 #    print("Invalid excel file.  Exiting...")
                 #    return False
             if file_validity:
-                print("Valid excel file.  Continuing...")
+                print(f"{GREEN_TERMINAL_TEXT}Valid{DEFAULT_TERMINAL_TEXT} excel file.  Continuing...")
             else:
-                print("Invalid excel file. Exiting...")
+                print(f"{RED_TERMINAL_TEXT}Invalid{DEFAULT_TERMINAL_TEXT} excel file. Exiting...")
             return file_validity
         except Exception as e:
             print(e)
