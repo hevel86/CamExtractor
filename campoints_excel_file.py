@@ -28,18 +28,29 @@ class CampointsExcelFile:
     def is_valid_data(self):
         """Check if the uploaded Excel file is valid"""
         # Read Excel file in pandas
+
+        # Assign the validity to false, initially
+        file_validity = False
         try:
             xl = pd.ExcelFile(self.filename_with_path)
             # Loop through each sheet
             for sheet in xl.sheet_names:
+                print(f'Scanning sheet {sheet}')
                 xl.parse(sheet)
                 df = pd.read_excel(xl, sheet)
                 # Check if the data we're looking for exists
                 if (DEGREES_COLUMN in df) and (POSITION_COLUMN in df):
                     self.dataframe = df
-                    return True
-                else:
-                    return False
+
+                    file_validity = True
+                #else:
+                #    print("Invalid excel file.  Exiting...")
+                #    return False
+            if file_validity:
+                print("Valid excel file.  Continuing...")
+            else:
+                print("Invalid excel file. Exiting...")
+            return file_validity
         except Exception as e:
             print(e)
 
