@@ -46,11 +46,9 @@ class CampointsExcelFile:
                 # Check if the data we're looking for exists
                 if (DEGREES_COLUMN in df) and (POSITION_COLUMN in df):
                     self.dataframe = df
-
+                    # Set the file validity to true
                     file_validity = True
-                #else:
-                #    print("Invalid excel file.  Exiting...")
-                #    return False
+            # Check the file validity to determine the output text
             if file_validity:
                 print(f"{GREEN_TERMINAL_TEXT}Valid{DEFAULT_TERMINAL_TEXT} excel file.  Continuing...")
             else:
