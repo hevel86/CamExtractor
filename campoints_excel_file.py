@@ -3,8 +3,8 @@ import os
 import pandas as pd
 
 # Declare global constants
-DEGREES_COLUMN = 'DEGREES'
-POSITION_COLUMN = 'POSITION'
+POSITION_COLUMN = ['POSITION', "Cycle\n Position"]
+DEGREES_COLUMN = ['DEGREES', "Axis\n Position"]
 DEFAULT_TERMINAL_TEXT = '\033[0m'
 RED_TERMINAL_TEXT = '\033[31m'
 GREEN_TERMINAL_TEXT = '\033[32m'
@@ -28,6 +28,9 @@ class CampointsExcelFile:
         self.___filepath = os.path.dirname(self.filename_with_path)
         self.dataframe = None
         self.is_rotodex_cam = False
+        self.degrees_index_found = None
+        self.position_index_found = None
+
 
     def is_valid_data(self):
         """Check if the uploaded Excel file is valid"""
@@ -44,7 +47,12 @@ class CampointsExcelFile:
                 xl.parse(sheet)
                 df = pd.read_excel(xl, sheet)
                 # Check if the data we're looking for exists
-                if (DEGREES_COLUMN in df) and (POSITION_COLUMN in df):
+                self.degrees_index_found = next((i for i, column in enumerate(DEGREES_COLUMN) if column in df), None)
+                self.position_index_found = next((i for i, column in enumerate(POSITION_COLUMN) if column in df), None)
+                print(self.degrees_index_found)
+                print(self.position_index_found)
+
+                if (DEGREES_COLUMN[self.degrees_index_found] in df) and (POSITION_COLUMN[self.position_index_found] in df):
                     self.dataframe = df
                     # Set the file validity to true
                     file_validity = True

@@ -27,8 +27,8 @@ def create_graph(x_list, y_list):
     """Create graph using pyplot"""
     plt.plot(x_list, y_list)
     plt.title(cef.base_filename)
-    plt.xlabel(POSITION_COLUMN.title())
-    plt.ylabel(DEGREES_COLUMN.title())
+    plt.xlabel(POSITION_COLUMN[cef.position_index_found].title())
+    plt.ylabel(DEGREES_COLUMN[cef.degrees_index_found].title())
     plt.get_current_fig_manager().set_window_title(cef.figure_title + " Motion Profile")
     plt.show()
 
@@ -43,8 +43,8 @@ def remove_null_from_dataframe(pandas_list):
 def panda_manipulation(excel_filename):
     """Use the pandas library to retrieve the degrees column and create a list"""
     # Extract data from the position and degrees column after removing the null values
-    degrees_list = remove_null_from_dataframe(cef.dataframe[DEGREES_COLUMN].tolist())
-    position_list = remove_null_from_dataframe(cef.dataframe[POSITION_COLUMN].tolist())
+    degrees_list = remove_null_from_dataframe(cef.dataframe[DEGREES_COLUMN[cef.degrees_index_found]].tolist())
+    position_list = remove_null_from_dataframe(cef.dataframe[POSITION_COLUMN[cef.position_index_found]].tolist())
 
     # Check if it's a rotodex cam
     if len(position_list) <= EXPECTED_ROTODEX_LIST_LENGTH:
@@ -67,8 +67,8 @@ def panda_manipulation(excel_filename):
 
     # Create dictionary
     cef_dictionary = {
-        POSITION_COLUMN: position_list,
-        DEGREES_COLUMN: degrees_list,
+        POSITION_COLUMN[cef.position_index_found]: position_list,
+        DEGREES_COLUMN[cef.degrees_index_found]: degrees_list,
         CAMPOINTS_COLUMN: campoints_list
     }
     return cef_dictionary
@@ -114,4 +114,4 @@ if cef.is_valid_data():
 
     # Print the ascii table
     print(cef_table)
-    create_graph(x_list=cef_dict[POSITION_COLUMN], y_list=cef_dict[DEGREES_COLUMN])
+    create_graph(x_list=cef_dict[POSITION_COLUMN[cef.position_index_found]], y_list=cef_dict[DEGREES_COLUMN[cef.degrees_index_found]])
