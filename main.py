@@ -1,10 +1,9 @@
 # Import necessary tools
-from campoints_excel_file import CampointsExcelFile, DEGREES_COLUMN, POSITION_COLUMN
-import pandas as pd
-import openpyxl
-from prettytable import PrettyTable
 import matplotlib.pyplot as plt
-import xlsxwriter
+import pandas as pd
+from prettytable import PrettyTable
+
+from campoints_excel_file import CampointsExcelFile, DEGREES_COLUMN, POSITION_COLUMN
 
 # Declare global constants
 CSV_HEADER = '% MA_PERIODE=1 SL_PERIODE=1 CYCLIC=1'
