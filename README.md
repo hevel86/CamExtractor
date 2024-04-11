@@ -8,6 +8,7 @@ This Python script is designed to extract data from a specified Excel file and p
 - openpyxl
 - prettytable
 - matplotlib
+- xlrd
 
 ## Usage:
 1. Place the `campoints.py` file in a directory.
