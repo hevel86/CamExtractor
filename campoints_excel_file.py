@@ -31,7 +31,6 @@ class CampointsExcelFile:
         self.degrees_index_found = None
         self.position_index_found = None
 
-
     def is_valid_data(self):
         """Check if the uploaded Excel file is valid"""
         # Read Excel file in pandas
@@ -49,10 +48,11 @@ class CampointsExcelFile:
                 # Check if the data we're looking for exists
                 self.degrees_index_found = next((i for i, column in enumerate(DEGREES_COLUMN) if column in df), None)
                 self.position_index_found = next((i for i, column in enumerate(POSITION_COLUMN) if column in df), None)
-                print(self.degrees_index_found)
-                print(self.position_index_found)
+                print(f"{DEGREES_COLUMN[self.degrees_index_found]} Index: {self.degrees_index_found}")
+                print(f"{POSITION_COLUMN[self.position_index_found]} Index:{self.position_index_found}")
 
-                if (DEGREES_COLUMN[self.degrees_index_found] in df) and (POSITION_COLUMN[self.position_index_found] in df):
+                if (DEGREES_COLUMN[self.degrees_index_found] in df) and (
+                        POSITION_COLUMN[self.position_index_found] in df):
                     self.dataframe = df
                     # Set the file validity to true
                     file_validity = True
