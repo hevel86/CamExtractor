@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from prettytable import PrettyTable
-
+from decimal import Decimal, getcontext
 from campoints_excel_file import CampointsExcelFile, DEGREES_COLUMN, POSITION_COLUMN
 
 # Declare global constants
@@ -13,7 +13,10 @@ REGULAR_FINAL_CAMPOINT = 0
 EXPECTED_ROTODEX_LIST_LENGTH = 37
 ROTODEX_NUM_CAMPOINTS = 180
 ROTODEX_FINAL_CAMPOINT = 1
+TRUNCATE_POINTS = 6
 
+#Set the precision for Decimal operations
+getcontext().prec = TRUNCATE_POINTS + 1
 
 def create_ascii_table(input_dictionary, table):
     """Create an ascii table from the derived data"""
@@ -62,7 +65,9 @@ def panda_manipulation(excel_filename):
         degrees_list.append(final_degrees_position)
 
     # Create campoints list by dividing by the num campoints if the item isn't null
-    campoints_list = [campoints_index / num_campoints for campoints_index in degrees_list if pd.notna(campoints_index)]
+    precision_str = '0.' + '0' * TRUNCATE_POINTS
+    campoints_list = [Decimal(index / num_campoints).quantize(Decimal(precision_str)) for index in degrees_list if
+                      pd.notna(index)]
 
     # Create dictionary
     cef_dictionary = {
