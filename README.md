@@ -32,3 +32,10 @@ This Python script is designed to extract data from a specified Excel file and p
 - The CAMPOINTS data is exported to a CSV file using the `export_csv` function.
 - The ASCII table is generated using the `create_ascii_table` function.
 - The graph is generated using the `create_graph` function.
+
+## Motion Profile
+![Motion Profile](graphics/graph.png)
+
+## Console Output
+![Pretty Table](graphics/pretty_table.png)
+
